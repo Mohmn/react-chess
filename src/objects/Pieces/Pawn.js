@@ -20,7 +20,7 @@ class Pawn extends Piece {
        
         // for now only return vertical movment
         console.log('moves',this.placedOnBottomSide)
-        
+
         return this._verticalMovement();
 
     }
@@ -29,7 +29,8 @@ class Pawn extends Piece {
     _upLoop(initTialPos, finalPos) {
         const moves = [];
         console.log(initTialPos,finalPos,this._inc)
-        for (let i = initTialPos; i > finalPos; i += this._inc) {
+        initTialPos = initTialPos + this._inc;
+        for (let i = initTialPos; i >= finalPos; i += this._inc) {
             console.log('i',i)
             moves.push([i, this.col]);
         }
@@ -39,8 +40,9 @@ class Pawn extends Piece {
 
     // movent for pawn goin down
     _downLoop(initTialPos, finalPos) {
-        const moves = []
-        for (let i = initTialPos; i < finalPos; i += this._inc) {
+        const moves = [];
+        initTialPos = initTialPos + this._inc;
+        for (let i = initTialPos; i <= finalPos; i += this._inc) {
             moves.push([this.row + i, this.col]);
         }
 
@@ -55,6 +57,8 @@ class Pawn extends Piece {
             return this._upLoop(rowPos, maxDis);
         return this._downLoop(rowPos, maxDis);
     }
+
+    
 
 }
 
