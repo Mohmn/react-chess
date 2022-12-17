@@ -43,7 +43,7 @@ class Pawn extends Piece {
         const moves = [];
         initTialPos = initTialPos + this._inc;
         for (let i = initTialPos; i <= finalPos; i += this._inc) {
-            moves.push([this.row + i, this.col]);
+            moves.push([i, this.col]);
         }
 
         return moves;

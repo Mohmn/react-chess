@@ -36,5 +36,4 @@ describe('test pawn for upperside side', () => {
         const expectedMoves = [[2, 1], [3, 1]];
         expect(moves).toEqual(expectedMoves);
 
-    })
-})
+});
