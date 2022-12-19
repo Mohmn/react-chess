@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-import Player from "./objects/Player";
-import { makeChessBoard } from "./objects/ChessBoard";
+import React, { useState, useRef } from 'react';
+import Player from './objects/Player';
+import { makeChessBoard } from './objects/ChessBoard';
 
-const p1 = new Player("sm");
-const p2 = new Player("cp");
+const p1 = new Player('sm');
+const p2 = new Player('cp');
 
 const Chessboard = () => {
   const [chessboard, setChessboard] = useState(() => makeChessBoard([p2, p1]));
@@ -64,20 +64,20 @@ const Chessboard = () => {
   }
 
   function highLightPieceMoves (piece) {
-    console.log("moves", piece.availableMoves());
+    console.log('moves', piece.availableMoves());
   }
 
   function userCLickedOnItsOwnPiece (piece) {
     // later on some css update will be made here too
     // like u arent allowed to click on this piece
-    if (piece.belongsTo !== currentPlayer.current) { console.warn("u aint supposed to click on this piece for the first turn"); }
+    if (piece.belongsTo !== currentPlayer.current) { console.warn('u aint supposed to click on this piece for the first turn'); }
 
     return piece.belongsTo === currentPlayer.current;
   }
   function handleBoxCLick (i, j) {
     const piece = chessboard[i][j];
     const player = currentPlayer.current;
-    console.log("click", piece, player.firstTurn(), player.secondTurn());
+    console.log('click', piece, player.firstTurn(), player.secondTurn());
 
     if (player.firstTurn()) {
       if (piece) {
@@ -93,7 +93,7 @@ const Chessboard = () => {
       // more checks have to be placed here if user
       // clicks on non empty piece
       // for now only update the non null pieces
-      console.log("ann");
+      console.log('ann');
       if (!piece) {
         updateChessBoard([i, j]);
       }

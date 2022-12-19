@@ -1,4 +1,4 @@
-import { Piece } from "./Piece";
+import { Piece } from './Piece';
 
 class Rook extends Piece {
   // representation for now is going to alphabets

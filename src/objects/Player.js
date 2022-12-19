@@ -1,7 +1,7 @@
 class Player {
   _turnType = {
-    first: "first",
-    second: "second"
+    first: 'first',
+    second: 'second'
   };
 
   constructor (type) {

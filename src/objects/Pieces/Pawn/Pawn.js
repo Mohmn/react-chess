@@ -1,4 +1,4 @@
-import { Piece } from "../Piece";
+import { Piece } from '../Piece';
 
 class Pawn extends Piece {
   firstMove = true;
@@ -14,7 +14,7 @@ class Pawn extends Piece {
 
   availableMoves (board) {
     // for now only return vertical movment
-    console.log("moves", this.placedOnBottomSide);
+    console.log('moves', this.placedOnBottomSide);
 
     return this._verticalMovement();
   }
@@ -25,7 +25,7 @@ class Pawn extends Piece {
     console.log(initTialPos, finalPos, this._inc);
     initTialPos = initTialPos + this._inc;
     for (let i = initTialPos; i >= finalPos; i += this._inc) {
-      console.log("i", i);
+      console.log('i', i);
       moves.push([i, this.col]);
     }
 
