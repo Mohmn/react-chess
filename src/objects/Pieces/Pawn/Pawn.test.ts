@@ -1,19 +1,20 @@
 import { Pawn } from './Pawn';
 import Player  from '../../Player';
+import {makeChessBoard} from '../../ChessBoard';
 
 
 describe('test pawn for bottow side', () => {
 
-    const pl = new Player('t1');
-    const p = new Pawn(6, 6, pl, 'p');
+    const p1 = new Player('p1');
+    const p2 = new Player('p2');
+    const p = new Pawn(6, 6, p1, 'p');
 
     it('should be placed on bottmom side', () => {
         expect(p.placedOnBottomSide).toBeTruthy();
     })
 
     it('should return correct avaiable Moves', () => {
-        let board = []; //for now
-        const moves = p.availableMoves(board);
+        const moves = p.availableMoves(makeChessBoard([p1,p2]));
         const expectedMoves = [[5, 6], [4, 6]];
         expect(moves).toEqual(expectedMoves);
 
@@ -24,15 +25,15 @@ describe('test pawn for bottow side', () => {
 
 describe('test pawn for upperside side', () => {
 
-    const pl = new Player('t1');
-    const p = new Pawn(1, 1, pl, 'p');
+    const p1 = new Player('p1');
+    const p2 = new Player('p2');
+    const p = new Pawn(1, 1, p1, 'p');
 
     it('should be placed on upper side', () => {
         expect(p.placedOnBottomSide).toBeFalsy();
     })
 
-        let board = []; //for now
-        const moves = p.availableMoves(board);
+        const moves = p.availableMoves(makeChessBoard([p1,p2]));
         const expectedMoves = [[2, 1], [3, 1]];
         expect(moves).toEqual(expectedMoves);
 

@@ -1,16 +1,18 @@
 import React, { useState, useRef } from "react";
 import Player from "./objects/Player";
 import { makeChessBoard } from "./objects/ChessBoard";
+import { ChessPiece, PiecePos } from "./objects/types";
+
 
 
 const p1 = new Player('sm');
 const p2 = new Player('cp');
 
 
-const Chessboard = () => {
+function Chessboard() {
 	const [chessboard, setChessboard] = useState(() => makeChessBoard([p2, p1]));
 	// you can start adding moving feature
-	const [selectedSquareLoc, setSelectedSquareLoc] = useState(null);
+	const [selectedSquareLoc, setSelectedSquareLoc] = useState<PiecePos | null>(null);
 	const currentPlayer = useRef(p1);
 
 	function switchPlayers() {
@@ -51,15 +53,15 @@ const Chessboard = () => {
 	// 	}
 	// }
 
-	function updateChessBoard(nextLoc) {
+	function updateChessBoard(nextLoc: PiecePos) {
 
 		const [nextRowPos, nextColPos] = nextLoc;
 		setChessboard((previousChessboard) => {
-			const rowLoc = selectedSquareLoc.i;
-			const colLoc = selectedSquareLoc.j;
+			const rowLoc = selectedSquareLoc![0];
+			const colLoc = selectedSquareLoc![1];
 			const selectedPiece = previousChessboard[rowLoc][colLoc]
 			const newChessboard = [...previousChessboard];
-			selectedPiece.setPos(nextRowPos,nextColPos);
+			selectedPiece!.setPos(nextRowPos,nextColPos);
 			newChessboard[nextRowPos][nextColPos] = selectedPiece;
 			newChessboard[rowLoc][colLoc] = null;
 			return newChessboard;
@@ -67,11 +69,11 @@ const Chessboard = () => {
 
 	}
 
-	function highLightPieceMoves(piece) {
-		console.log('moves',piece.availableMoves());
+	function highLightPieceMoves(piece: ChessPiece) {
+		console.log('moves',piece.availableMoves(chessboard));
 	}
 
-	function userCLickedOnItsOwnPiece(piece) {
+	function userCLickedOnItsOwnPiece(piece:ChessPiece) {
 
 		// later on some css update will be made here too
 		// like u arent allowed to click on this piece
@@ -81,7 +83,7 @@ const Chessboard = () => {
 		return piece.belongsTo === currentPlayer.current
 
 	}
-	function handleBoxCLick(i, j) {
+	function handleBoxCLick(i: number, j: number) {
 		const piece = chessboard[i][j];
 		const player = currentPlayer.current;
 		console.log('click', piece, player.firstTurn(), player.secondTurn())
@@ -90,7 +92,7 @@ const Chessboard = () => {
 
 			if (piece) {
 				if (!userCLickedOnItsOwnPiece(piece)) return;
-				setSelectedSquareLoc({ i, j });
+				setSelectedSquareLoc([i, j ]);
 				highLightPieceMoves(piece)
 				player.updateTurn();
 			}

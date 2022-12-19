@@ -1,40 +1,42 @@
+import { PiecePos } from "../types";
+
 const CHESSBOARDSIZE = 7;
 
 
-function traverseUpVerticaly(row, col) {
-    const moves = [];
+function traverseUpVerticaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[] = [];
     for (let i = row - 1; i >= 0; i--) {
         moves.push([i, col])
     }
     return moves;
 }
 
-function traverseDownVerticaly(row, col) {
-    const moves = [];
+function traverseDownVerticaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     for (let i = row + 1; i <= CHESSBOARDSIZE; i++) {
         moves.push([i, col]);
     }
     return moves;
 }
 
-function traverseRightHorizontly(row, col) {
-    const moves = [];
+function traverseRightHorizontly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     for (let i = col + 1; i <= CHESSBOARDSIZE; i++) {
         moves.push([row, i])
     }
     return moves;
 }
 
-function traverseLeftHorizontly(row, col) {
-    const moves = [];
+function traverseLeftHorizontly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     for (let i = col - 1; i >= 0; i--) {
         moves.push([row, i])
     }
     return moves;
 }
 
-function traversRightDownDiagonaly(row, col) {
-    const moves = [];
+function traversRightDownDiagonaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     let i = row + 1, j = col + 1;
     while (i <= CHESSBOARDSIZE && j <= CHESSBOARDSIZE) {
         moves.push([i, j]);
@@ -45,8 +47,8 @@ function traversRightDownDiagonaly(row, col) {
 
 }
 
-function traversRightUpDiagonaly(row, col) {
-    const moves = [];
+function traversRightUpDiagonaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     let i = row - 1, j = col - 1;
     while (i >= 0 && j >= 0) {
         moves.push([i, j]);
@@ -56,8 +58,8 @@ function traversRightUpDiagonaly(row, col) {
     return moves;
 }
 
-function traversLeftDownDiagonaly(row, col) {
-    const moves = [];
+function traversLeftDownDiagonaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     let i = row + 1, j = col - 1;
     while (i <= CHESSBOARDSIZE && j >= 0) {
         moves.push([i, j]);
@@ -67,8 +69,8 @@ function traversLeftDownDiagonaly(row, col) {
     return moves;
 }
 
-function traversLeftUpDiagonaly(row, col) {
-    const moves = [];
+function traversLeftUpDiagonaly(row: number, col: number): PiecePos[] {
+    const moves: PiecePos[]  = [];
     let i = row - 1, j = col + 1;
     while (i >= 0 && j <= CHESSBOARDSIZE) {
         moves.push([i, j]);
