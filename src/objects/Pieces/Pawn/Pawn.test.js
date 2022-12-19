@@ -1,39 +1,34 @@
-import { Pawn } from './Pawn';
-import Player  from '../../Player';
+import { Pawn } from "./Pawn";
+import Player from "../../Player";
 
+describe("test pawn for bottow side", () => {
+  const pl = new Player("t1");
+  const p = new Pawn(6, 6, pl, "p");
 
-describe('test pawn for bottow side', () => {
+  it("should be placed on bottmom side", () => {
+    expect(p.placedOnBottomSide).toBeTruthy();
+  });
 
-    const pl = new Player('t1');
-    const p = new Pawn(6, 6, pl, 'p');
+  it("should return correct avaiable Moves", () => {
+    const board = []; // for now
+    const moves = p.availableMoves(board);
+    const expectedMoves = [[5, 6], [4, 6]];
+    expect(moves).toEqual(expectedMoves);
+  });
 
-    it('should be placed on bottmom side', () => {
-        expect(p.placedOnBottomSide).toBeTruthy();
-    })
+  // p.setPos(5,5)
+});
 
-    it('should return correct avaiable Moves', () => {
-        let board = []; //for now
-        const moves = p.availableMoves(board);
-        const expectedMoves = [[5, 6], [4, 6]];
-        expect(moves).toEqual(expectedMoves);
+describe("test pawn for upperside side", () => {
+  const pl = new Player("t1");
+  const p = new Pawn(1, 1, pl, "p");
 
-    })
+  it("should be placed on upper side", () => {
+    expect(p.placedOnBottomSide).toBeFalsy();
+  });
 
-    // p.setPos(5,5)
-})
-
-describe('test pawn for upperside side', () => {
-
-    const pl = new Player('t1');
-    const p = new Pawn(1, 1, pl, 'p');
-
-    it('should be placed on upper side', () => {
-        expect(p.placedOnBottomSide).toBeFalsy();
-    })
-
-        let board = []; //for now
-        const moves = p.availableMoves(board);
-        const expectedMoves = [[2, 1], [3, 1]];
-        expect(moves).toEqual(expectedMoves);
-
+  const board = []; // for now
+  const moves = p.availableMoves(board);
+  const expectedMoves = [[2, 1], [3, 1]];
+  expect(moves).toEqual(expectedMoves);
 });

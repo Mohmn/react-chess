@@ -1,6 +1,6 @@
-import './App.css';
-import Chessboard from './Chessboard';
-function App() {
+import "./App.css";
+import Chessboard from "./Chessboard";
+function App () {
   return (
     <Chessboard />
   );

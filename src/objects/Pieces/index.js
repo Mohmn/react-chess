@@ -5,5 +5,4 @@ import { Rook } from "./Rook";
 import { Pawn } from "./Pawn/Pawn";
 import { Bishop } from "./Bishop";
 
-
-export { King, Knight, Pawn, Queen, Rook, Bishop }; 
+export { King, Knight, Pawn, Queen, Rook, Bishop };
