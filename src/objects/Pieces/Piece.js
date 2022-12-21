@@ -1,38 +1,35 @@
 class Piece {
+  constructor (row, col, belongsTo, representation) {
+    this.row = row;
+    this.col = col;
+    this.belongsTo = belongsTo;
+    this.representation = representation;
+  }
 
+  render () {
+    return this.representation;
+  }
 
-	constructor(row, col, belongsTo, representation) {
-		this.row = row;
-		this.col = col;
-		this.belongsTo = belongsTo;
-		this.representation = representation;
-	}
+  getPos () {
+    return [this.row, this.col];
+  }
 
-	render() {
-		return this.representation;
-	}
+  getRow () {
+    return this.row;
+  }
 
-	getPos() {
-		return [this.row, this.col]
-	}
+  getCol () {
+    return this.col;
+  }
 
-	getRow() {
-		return this.row;
-	}
+  setPos (row, col) {
+    this.row = row;
+    this.col = col;
+  }
 
-	getCol() {
-		return this.col;
-	}
+  // render() {
 
-	setPos(row, col) {
-		this.row = row;
-		this.col = col;
-	}
-
-	// render() {
-
-	// }
-
+  // }
 }
 
 export { Piece };
