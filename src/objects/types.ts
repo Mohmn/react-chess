@@ -5,9 +5,9 @@ interface ChessPlayer {
 
     updateTurn: () => void;
 
-    firstTurn: () => Boolean;
+    firstTurn: () => boolean;
 
-    secondTurn: () => Boolean;
+    secondTurn: () => boolean;
 }
 
 type Board = (ChessPiece| null) [][];
@@ -37,13 +37,11 @@ interface ChessPiece {
     availableMoves: (board: Board) => PiecePos[];
 }
 
-
-
 export type {
 
-    ChessPiece,
-    Board,
-    ChessPlayer,
-    PiecePos,
+  ChessPiece,
+  Board,
+  ChessPlayer,
+  PiecePos,
 
 };

@@ -1,19 +1,19 @@
-import { ChessPlayer } from "./types";
-
+import { ChessPlayer } from './types';
 
 class Player implements ChessPlayer {
 
-    private _turnType = {
-        first: 'first',
-        second: 'second',
-    }
-    private _turn: string;
-    type: string;
+  private _turnType = {
+    first: 'first',
+    second: 'second',
+  };
 
-    constructor(type: string) {
-        this._turn = this._turnType.first
-        this.type = type;
-    }
+  private _turn: string;
+  type: string;
+
+  constructor(type: string) {
+    this._turn = this._turnType.first;
+    this.type = type;
+  }
 
   firstTurn () {
     return this._turn === this._turnType.first;
