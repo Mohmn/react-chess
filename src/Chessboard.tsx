@@ -15,43 +15,43 @@ function Chessboard() {
 	const [selectedSquareLoc, setSelectedSquareLoc] = useState<PiecePos | null>(null);
 	const currentPlayer = useRef(p1);
 
-	function switchPlayers() {
-		const player = currentPlayer.current;
-		player.updateTurn();
-		currentPlayer.current = player.type === p1.type ? p2 : p1;
-	}
+  function switchPlayers () {
+    const player = currentPlayer.current;
+    player.updateTurn();
+    currentPlayer.current = player.type === p1.type ? p2 : p1;
+  }
 
-	// function validate({ i, j, selectedPiece, selectedRow, selectedColumn }) {
-	// 	switch (selectedPiece) {
-	// 		case "P":
-	// 			if (selectedRow === i - 1 && selectedColumn === j) {
-	// 				setChessboard((previousChessboard) => {
-	// 					const newChessboard = [...previousChessboard];
-	// 					newChessboard[i][j] = selectedPiece;
-	// 					newChessboard[selectedRow][selectedColumn] = null;
-	// 					return newChessboard;
-	// 				});
-	// 				setSelectedSquare(null);
-	// 			}
-	// 			break;
+  // function validate({ i, j, selectedPiece, selectedRow, selectedColumn }) {
+  // 	switch (selectedPiece) {
+  // 		case "P":
+  // 			if (selectedRow === i - 1 && selectedColumn === j) {
+  // 				setChessboard((previousChessboard) => {
+  // 					const newChessboard = [...previousChessboard];
+  // 					newChessboard[i][j] = selectedPiece;
+  // 					newChessboard[selectedRow][selectedColumn] = null;
+  // 					return newChessboard;
+  // 				});
+  // 				setSelectedSquare(null);
+  // 			}
+  // 			break;
 
-	// 		case "p":
-	// 			if (selectedRow === i + 1 && selectedColumn === j) {
-	// 				setChessboard((previousChessboard) => {
-	// 					const newChessboard = [...previousChessboard];
-	// 					newChessboard[i][j] = selectedPiece;
-	// 					newChessboard[selectedRow][selectedColumn] = null;
-	// 					return newChessboard;
-	// 				});
-	// 				setSelectedSquare(null);
-	// 			}
-	// 		case "r":
-	// 		case "R":
-	// 			break;
-	// 		default:
-	// 			break;
-	// 	}
-	// }
+  // 		case "p":
+  // 			if (selectedRow === i + 1 && selectedColumn === j) {
+  // 				setChessboard((previousChessboard) => {
+  // 					const newChessboard = [...previousChessboard];
+  // 					newChessboard[i][j] = selectedPiece;
+  // 					newChessboard[selectedRow][selectedColumn] = null;
+  // 					return newChessboard;
+  // 				});
+  // 				setSelectedSquare(null);
+  // 			}
+  // 		case "r":
+  // 		case "R":
+  // 			break;
+  // 		default:
+  // 			break;
+  // 	}
+  // }
 
 	function updateChessBoard(nextLoc: PiecePos) {
 
@@ -66,23 +66,17 @@ function Chessboard() {
 			newChessboard[rowLoc][colLoc] = null;
 			return newChessboard;
 		});
+  }
 
-	}
 
 	function highLightPieceMoves(piece: ChessPiece) {
 		console.log('moves',piece.availableMoves(chessboard));
 	}
 
 	function userCLickedOnItsOwnPiece(piece:ChessPiece) {
+    return piece.belongsTo === currentPlayer.current;
+  }
 
-		// later on some css update will be made here too
-		// like u arent allowed to click on this piece
-		if (piece.belongsTo !== currentPlayer.current)
-			console.warn('u aint supposed to click on this piece for the first turn');
-
-		return piece.belongsTo === currentPlayer.current
-
-	}
 	function handleBoxCLick(i: number, j: number) {
 		const piece = chessboard[i][j];
 		const player = currentPlayer.current;
@@ -122,7 +116,7 @@ function Chessboard() {
 		<table>
 			<tbody>
 				{chessboard.map((row, i) => {
-					return (
+				  return (
 						<tr key={i}>
 							{row.map((cell, j) => (
 								<td key={j} onClick={() => handleBoxCLick(i, j)}>
@@ -130,11 +124,11 @@ function Chessboard() {
 								</td>
 							))}
 						</tr>
-					);
+				  );
 				})}
 			</tbody>
 		</table>
-	);
+  );
 };
 
 export default Chessboard;

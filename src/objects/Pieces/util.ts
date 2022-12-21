@@ -80,18 +80,13 @@ function traversLeftUpDiagonaly(row: number, col: number): PiecePos[] {
     return moves;
 }
 
-
-
-
-
-
 export {
-    traverseDownVerticaly,
-    traverseUpVerticaly,
-    traverseLeftHorizontly,
-    traverseRightHorizontly,
-    traversRightUpDiagonaly,
-    traversRightDownDiagonaly,
-    traversLeftUpDiagonaly,
-    traversLeftDownDiagonaly,
-}
+  traverseDownVerticaly,
+  traverseUpVerticaly,
+  traverseLeftHorizontly,
+  traverseRightHorizontly,
+  traversRightUpDiagonaly,
+  traversRightDownDiagonaly,
+  traversLeftUpDiagonaly,
+  traversLeftDownDiagonaly
+};

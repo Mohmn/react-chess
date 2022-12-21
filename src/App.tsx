@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import Chessboard from './Chessboard';
 
-function App() {
+function App () {
+
   return (
     <Chessboard />
   );
