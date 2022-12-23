@@ -2,13 +2,14 @@
 import React, { useState, useRef } from 'react';
 import Player from './objects/Player';
 import { makeChessBoard } from './objects/ChessBoard';
-import { ChessPiece, PiecePos } from './objects/types';
+import { ChessPiece, PiecePos, ArraySetType } from './objects/types';
 
 const p1 = new Player('sm');
 const p2 = new Player('cp');
 
 function Chessboard() {
   const [chessboard, setChessboard] = useState(() => makeChessBoard([p2, p1]));
+  const [locationsToHighLight,setLocationsToHighLight] = useState<ArraySetType | null>(null);
   // you can start adding moving feature
   const [selectedSquareLoc, setSelectedSquareLoc] = useState<PiecePos | null>(null);
   const currentPlayer = useRef(p1);
@@ -67,7 +68,17 @@ function Chessboard() {
   }
 
   function highLightPieceMoves(piece: ChessPiece) {
-    console.log('moves',piece.availableMoves(chessboard));
+    console.log('locations to highligh3',locationsToHighLight);
+    if(locationsToHighLight) return;
+    const locations = piece.availableMoves(chessboard);
+    console.log('locations to highligh',locations);
+    setLocationsToHighLight(locations);
+  }
+
+
+  function unhighLightPieceMoves() {
+    if(!locationsToHighLight) return;
+    setLocationsToHighLight(null);
   }
 
   function userCLickedOnItsOwnPiece(piece:ChessPiece) {
@@ -99,6 +110,7 @@ function Chessboard() {
         updateChessBoard([i, j]);
       }
 
+      unhighLightPieceMoves();
       switchPlayers();
 
       return;
@@ -114,7 +126,12 @@ function Chessboard() {
           return (
             <tr key={i}>
               {row.map((cell, j) => (
-                <td key={j} onClick={() => handleBoxCLick(i, j)}>
+                <td
+                  key={j}
+                  onClick={() => handleBoxCLick(i, j)}
+                  className={
+                    locationsToHighLight?.has([i,j]) ? 'highlight' : ''
+                  }>
                   {cell && cell.render()}
                 </td>
               ))}
