@@ -13,7 +13,7 @@ describe('test pawn for bottow side', () => {
   });
 
   it('should return correct avaiable Moves', () => {
-    const moves = p.availableMoves(makeChessBoard([p1,p2]));
+    const moves = p.availableMoves(makeChessBoard([p1,p2])).toArray();
     const expectedMoves = [[5, 6], [4, 6]];
     expect(moves).toEqual(expectedMoves);
 
@@ -32,7 +32,7 @@ describe('test pawn for upperside side', () => {
     expect(p.placedOnBottomSide).toBeFalsy();
   });
 
-  const moves = p.availableMoves(makeChessBoard([p1,p2]));
+  const moves = p.availableMoves(makeChessBoard([p1,p2])).toArray();
   const expectedMoves = [[2, 1], [3, 1]];
   expect(moves).toEqual(expectedMoves);
 

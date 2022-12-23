@@ -10,8 +10,7 @@ describe('test ArraySet', () => {
   });
 
   it('should not have [1,2]', () => {
-    aSet.add([1, 2]);
-    expect(aSet.has([1, 2])).toBeTruthy();
+    expect(aSet.has([1, 2])).toBeFalsy();
 
   });
 
