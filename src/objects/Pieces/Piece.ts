@@ -3,6 +3,7 @@ import {
   ChessPiece,
   ChessPlayer,
   PiecePos,
+  ArraySetType
 } from '../types';
 
 abstract class Piece implements ChessPiece {
@@ -21,7 +22,7 @@ abstract class Piece implements ChessPiece {
 
   // abstract makeNoise(): void;
 
-  abstract availableMoves(board: Board): PiecePos[];
+  abstract availableMoves(board: Board): ArraySetType;
 
   render() {
     return this.representation;

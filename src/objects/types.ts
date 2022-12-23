@@ -1,40 +1,45 @@
 
 interface ChessPlayer {
 
-    type: string;
+  type: string;
 
-    updateTurn: () => void;
+  updateTurn: () => void;
 
-    firstTurn: () => boolean;
+  firstTurn: () => boolean;
 
-    secondTurn: () => boolean;
+  secondTurn: () => boolean;
 }
 
-type Board = (ChessPiece| null) [][];
+type Board = (ChessPiece | null)[][];
 
-type PiecePos = [number,number];
+type PiecePos = [number, number];
 
 interface ChessPiece {
 
-    row: number;
+  row: number;
 
-    col: number;
+  col: number;
 
-    belongsTo: ChessPlayer;
+  belongsTo: ChessPlayer;
 
-    representation: string;
+  representation: string;
 
-    getPos: () => PiecePos;
+  getPos: () => PiecePos;
 
-    getRow: () => number;
+  getRow: () => number;
 
-    getCol: () => number;
+  getCol: () => number;
 
-    setPos: (row: number, col: number) => void;
+  setPos: (row: number, col: number) => void;
 
-    render: () => string;
+  render: () => string;
 
-    availableMoves: (board: Board) => PiecePos[];
+  availableMoves: (board: Board) => ArraySetType;
+}
+
+interface ArraySetType {
+  add: (pos: PiecePos) => void;
+  has: (pos: PiecePos) => boolean;
 }
 
 export type {
@@ -43,5 +48,6 @@ export type {
   Board,
   ChessPlayer,
   PiecePos,
+  ArraySetType
 
 };

@@ -1,5 +1,6 @@
 import { Piece } from '../Piece';
 import { Board, ChessPlayer, PiecePos } from '../../types';
+import ArraySet from '../../ArraySet';
 
 class Pawn extends Piece {
   firstMove = true;
@@ -22,13 +23,13 @@ class Pawn extends Piece {
 
   // movent for pawn goin up
   _upLoop (initTialPos: number, finalPos: number) {
-    const moves: PiecePos[] = [];
+    const moves: ArraySet = new ArraySet();
     console.log(initTialPos, finalPos, this._inc);
     initTialPos = initTialPos + this._inc;
     // eslint-disable-next-line for-direction
     for (let i = initTialPos; i >= finalPos; i += this._inc) {
       console.log('i', i);
-      moves.push([i, this.col]);
+      moves.add([i, this.col]);
     }
 
     return moves;
@@ -36,10 +37,10 @@ class Pawn extends Piece {
 
   // movent for pawn goin down
   _downLoop (initTialPos: number, finalPos: number) {
-    const moves: PiecePos[] = [];
+    const moves: ArraySet = new ArraySet();
     initTialPos = initTialPos + this._inc;
     for (let i = initTialPos; i <= finalPos; i += this._inc) {
-      moves.push([i, this.col]);
+      moves.add([i, this.col]);
     }
 
     return moves;
