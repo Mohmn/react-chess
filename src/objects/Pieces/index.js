@@ -1,7 +1,7 @@
 import { King } from './King';
 import { Knight } from './Knight';
 import { Queen } from './Queen';
-import { Rook } from './Rook';
+import { Rook } from './Rook/Rook';
 import { Pawn } from './Pawn/Pawn';
 import { Bishop } from './Bishop';
 
