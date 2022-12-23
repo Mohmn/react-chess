@@ -38,8 +38,9 @@ interface ChessPiece {
 }
 
 interface ArraySetType {
-  add: (pos: PiecePos) => void;
+  add: (pos: PiecePos | PiecePos[]) => void;
   has: (pos: PiecePos) => boolean;
+  toArray(): Array<PiecePos>;
 }
 
 export type {
