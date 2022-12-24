@@ -24,10 +24,13 @@ export default class ArraySet implements ArraySetType {
 
   toArray(): Array<PiecePos> {
     const pos = [];
-    for (const strPos of this.uniqueElms.values()) {
-      pos.push(JSON.parse(strPos) as PiecePos);
+
+    const itr = this.uniqueElms.values() ;
+    let strPos = itr.next();
+    while(!strPos.done){
+      pos.push(JSON.parse(strPos.value) as PiecePos);
+      strPos = itr.next();
     }
-    console.log('ddd',this.uniqueElms,pos);
     return pos;
   }
 
