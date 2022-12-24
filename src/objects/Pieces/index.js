@@ -3,6 +3,6 @@ import { Knight } from './Knight';
 import { Queen } from './Queen';
 import { Rook } from './Rook/Rook';
 import { Pawn } from './Pawn/Pawn';
-import { Bishop } from './Bishop';
+import { Bishop } from './Bishop/Bishop';
 
 export { King, Knight, Pawn, Queen, Rook, Bishop };
