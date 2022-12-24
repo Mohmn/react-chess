@@ -1,4 +1,4 @@
-import { King } from './King';
+import { King } from './King/King';
 import { Knight } from './Knight/Knight';
 import { Queen } from './Queen';
 import { Rook } from './Rook/Rook';
