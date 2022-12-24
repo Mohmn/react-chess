@@ -41,7 +41,8 @@ describe('test util traversing funcs', () => {
   });
 
   it('diagonal traverse right up test', () => {
-    const moves = traversRightUpDiagonaly(3, 5);
+    
+    const moves = traversLeftUpDiagonaly(3, 5);
     const expectedMoves = [[2, 4], [1, 3], [0, 2]];
     expect(moves).toEqual(expectedMoves);
   });
@@ -53,7 +54,7 @@ describe('test util traversing funcs', () => {
   });
 
   it('diagonal traverse left up test', () => {
-    const moves = traversLeftUpDiagonaly(3, 5);
+    const moves = traversRightUpDiagonaly(3, 5);
     const expectedMoves = [[2, 6], [1, 7]];
     expect(moves).toEqual(expectedMoves);
   });
