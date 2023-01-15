@@ -45,6 +45,21 @@ abstract class Piece implements ChessPiece {
     this.col = col;
   }
 
+  validMoves(moves: PiecePos[], board: Board): PiecePos[] {
+
+    // later on addCheck checks too
+    return moves.filter(move => {
+      const boardInfo = board[move[0]][move[1]];
+      if (!boardInfo) return true;
+      return boardInfo.belongsTo !== this.belongsTo;
+    });
+  }
+
+  name() {
+    return this.constructor.name;
+  }
+  // check(board)
+
 }
 
 export { Piece };
