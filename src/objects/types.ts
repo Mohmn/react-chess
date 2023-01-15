@@ -35,6 +35,10 @@ interface ChessPiece {
   render: () => string;
 
   availableMoves: (board: Board) => ArraySetType;
+
+  validMoves(moves: PiecePos[], board: Board): PiecePos[];
+
+  name(): string;
 }
 
 interface ArraySetType {
