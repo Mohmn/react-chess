@@ -25,8 +25,8 @@ class King extends Piece {
     for (let i = 0; i < kingsAllAvailableMoves.length; i++) {
 
       const pos = kingsAllAvailableMoves[i];
-      const validRow = ((this.row + pos[0]) <= 7 || (this.row + pos[0]) >= 0);
-      const validCol = ((this.col + pos[1]) <= 7 || (this.col + pos[1]) >= 0);
+      const validRow = ((this.row + pos[0]) <= 7 && (this.row + pos[0]) >= 0);
+      const validCol = ((this.col + pos[1]) <= 7 && (this.col + pos[1]) >= 0);
 
       if (validCol && validRow) {
         moves.push([this.row + pos[0], this.col + pos[1]]);
