@@ -10,7 +10,6 @@ describe('test pawn for bottow side', () => {
 
   it('should return correct avaiable Moves', () => {
     const moves = rk.availableMoves(makeChessBoard([p1, p2])).toArray();
-    console.log('moves',moves);
     const expectedMoves = [
       [3, 2], [3, 1], [3, 0], [3, 4], [3, 5], [3, 6], [3, 7],
       [2, 3], [1, 3], [0, 3], [4, 3], [5, 3], [6, 3], [7, 3]

@@ -24,7 +24,6 @@ class Pawn extends Piece {
   // movent for pawn goin up
   _upLoop (initTialPos: number, finalPos: number) {
     const moves: ArraySet = new ArraySet();
-    console.log(initTialPos, finalPos, this._inc);
     initTialPos = initTialPos + this._inc;
     // eslint-disable-next-line for-direction
     for (let i = initTialPos; i >= finalPos; i += this._inc) {

@@ -7,10 +7,12 @@ import { ChessPiece, PiecePos, ArraySetType } from './objects/types';
 const p1 = new Player('sm');
 const p2 = new Player('cp');
 
+// function checkCheck
+
 function Chessboard() {
+  
   const [chessboard, setChessboard] = useState(() => makeChessBoard([p2, p1]));
   const [locationsToHighLight,setLocationsToHighLight] = useState<ArraySetType | null>(null);
-  // you can start adding moving feature
   const [selectedSquareLoc, setSelectedSquareLoc] = useState<PiecePos | null>(null);
   const currentPlayer = useRef(p1);
 
@@ -19,38 +21,6 @@ function Chessboard() {
     player.updateTurn();
     currentPlayer.current = player.type === p1.type ? p2 : p1;
   }
-
-  // function validate({ i, j, selectedPiece, selectedRow, selectedColumn }) {
-  // 	switch (selectedPiece) {
-  // 		case "P":
-  // 			if (selectedRow === i - 1 && selectedColumn === j) {
-  // 				setChessboard((previousChessboard) => {
-  // 					const newChessboard = [...previousChessboard];
-  // 					newChessboard[i][j] = selectedPiece;
-  // 					newChessboard[selectedRow][selectedColumn] = null;
-  // 					return newChessboard;
-  // 				});
-  // 				setSelectedSquare(null);
-  // 			}
-  // 			break;
-
-  // 		case "p":
-  // 			if (selectedRow === i + 1 && selectedColumn === j) {
-  // 				setChessboard((previousChessboard) => {
-  // 					const newChessboard = [...previousChessboard];
-  // 					newChessboard[i][j] = selectedPiece;
-  // 					newChessboard[selectedRow][selectedColumn] = null;
-  // 					return newChessboard;
-  // 				});
-  // 				setSelectedSquare(null);
-  // 			}
-  // 		case "r":
-  // 		case "R":
-  // 			break;
-  // 		default:
-  // 			break;
-  // 	}
-  // }
 
   function updateChessBoard(nextLoc: PiecePos) {
 
@@ -68,13 +38,10 @@ function Chessboard() {
   }
 
   function highLightPieceMoves(piece: ChessPiece) {
-    console.log('locations to highligh3',locationsToHighLight);
     if(locationsToHighLight) return;
     const locations = piece.availableMoves(chessboard);
-    console.log('locations to highligh',locations);
     setLocationsToHighLight(locations);
   }
-
 
   function unhighLightPieceMoves() {
     if(!locationsToHighLight) return;
