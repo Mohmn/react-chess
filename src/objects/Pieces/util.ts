@@ -2,6 +2,16 @@ import { PiecePos } from '../types';
 
 const CHESSBOARDSIZE = 7;
 
+const knightsAllAvailableMoves: PiecePos[] = [
+  [-2, 1], [-2, -1], [2, 1], [2, -1],
+  [-1, 2], [-1, -2], [1, 2], [1, -2]
+];
+
+const kingsAllAvailableMoves: PiecePos[] = [
+  [-1, 1], [-1, -1], [1, 1], [1, -1],
+  [1, 0], [-1, 0], [0, 1], [0, -1]
+];
+
 function traverseUpVerticaly(row: number, col: number): PiecePos[] {
   const moves: PiecePos[] = [];
   for (let i = row - 1; i >= 0; i--) {
@@ -79,6 +89,40 @@ function traversRightUpDiagonaly(row: number, col: number): PiecePos[] {
   return moves;
 }
 
+function traverseKnightMoves(row: number, col: number): PiecePos[] {
+
+  const moves: PiecePos[] = [];
+  for (let i = 0; i < knightsAllAvailableMoves.length; i++) {
+
+    const pos = knightsAllAvailableMoves[i];
+    const validRow = ((row + pos[0]) <= 7 && (row + pos[0]) >= 0);
+    const validCol = ((col + pos[1]) <= 7 && (col + pos[1]) >= 0);
+
+    if (validCol && validRow) {
+      moves.push([row + pos[0], col + pos[1]]);
+    }
+  }
+
+  return moves;
+}
+
+function traverseKingMoves(row: number, col: number): PiecePos[] {
+
+  const moves: PiecePos[] = [];
+  for (let i = 0; i < kingsAllAvailableMoves.length; i++) {
+
+    const pos = kingsAllAvailableMoves[i];
+    const validRow = ((row + pos[0]) <= 7 && (row + pos[0]) >= 0);
+    const validCol = ((col + pos[1]) <= 7 && (col + pos[1]) >= 0);
+
+    if (validCol && validRow) {
+      moves.push([row + pos[0], col + pos[1]]);
+    }
+  }
+
+  return moves;
+}
+
 export {
   traverseDownVerticaly,
   traverseUpVerticaly,
@@ -87,5 +131,7 @@ export {
   traversRightUpDiagonaly,
   traversRightDownDiagonaly,
   traversLeftUpDiagonaly,
-  traversLeftDownDiagonaly
+  traversLeftDownDiagonaly,
+  traverseKnightMoves,
+  traverseKingMoves,
 };
