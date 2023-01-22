@@ -1,4 +1,4 @@
-import { ChessPiece, ChessPlayer, Board, PiecePos } from './types';
+import { IChessPiece, IChessPlayer, IBoard, IPiecePos, IChessBoard } from './types';
 import { Pawn, Knight, King, Queen, Rook, Bishop } from './Pieces';
 import {
   traverseDownVerticaly,
@@ -12,9 +12,9 @@ import {
   traverseKnightMoves,
   traverseKingMoves,
 } from './Pieces/util';
-import { Piece } from './Pieces/Piece';
+import { Console } from 'console';
 
-function makePiece(pos: number[], belongsTo: ChessPlayer, type: string): ChessPiece {
+function makePiece(pos: number[], belongsTo: IChessPlayer, type: string): IChessPiece {
 
   const representation = type.toLowerCase();
 
@@ -36,7 +36,7 @@ function makePiece(pos: number[], belongsTo: ChessPlayer, type: string): ChessPi
   }
 }
 
-function makeChessBoard(players: ChessPlayer[]): Board {
+function makeChessBoard(players: IChessPlayer[]): IBoard {
 
   const [p1, p2] = players;
 
@@ -68,14 +68,14 @@ function makeChessBoard(players: ChessPlayer[]): Board {
   ];
 }
 
-class ChessBoard {
+class ChessBoard implements IChessBoard {
 
-  private _board: Board;
-  player1: ChessPlayer;
-  player2: ChessPlayer;
-  kingPos: PiecePos[];
+  private _board: IBoard;
+  player1: IChessPlayer;
+  player2: IChessPlayer;
+  kingPos: IPiecePos[];
 
-  constructor(players: ChessPlayer[]) {
+  constructor(players: IChessPlayer[]) {
     this.player1 = players[0];
     this.player2 = players[1];
     this._board = makeChessBoard(players);
@@ -90,28 +90,31 @@ class ChessBoard {
     }
   }
 
-  validMoves(moves: PiecePos[], attackingPiece: ChessPiece): PiecePos[] {
+  validMoves(moves: IPiecePos[], attackingPiece: IChessPiece): IPiecePos[] {
 
     // later on addCheck checks too
     return this.filterAttackOnOwnPieces(moves, attackingPiece).filter((move) => {
       const [row, col] = move;
+      const [aRow, aCol] = attackingPiece.getPos();
       const currentPiece = this.getPiece(row, col);
       this.movePiece(row, col, attackingPiece);
+      this.movePiece(aRow, aCol, null);
       const moveWouldCauseCheck = this.moveWouldCauseCheck(attackingPiece);
       this.movePiece(row, col, currentPiece);
-      return moveWouldCauseCheck;
+      this.movePiece(aRow,aCol,attackingPiece);
+      return !moveWouldCauseCheck;
     });
   }
 
-  filterAttackOnOwnPieces(moves: PiecePos[], attackingPiece: ChessPiece) {
+  private filterAttackOnOwnPieces(moves: IPiecePos[], attackingPiece: IChessPiece) {
     return moves.filter(move => {
-      const oppPiece = this.getPiece(move[0], move[1]);
-      if (!oppPiece) return true;
-      return oppPiece.belongsTo !== attackingPiece.belongsTo;
+      const piece = this.getPiece(move[0], move[1]);
+      if (!piece) return true;
+      return piece.belongsTo !== attackingPiece.belongsTo;
     });
   }
 
-  moveWouldCauseCheck(attackingPiece: ChessPiece) {
+  private moveWouldCauseCheck(attackingPiece: IChessPiece) {
     // let that move happen
     // after that check for is king in danger
     // king in danger means
@@ -121,74 +124,77 @@ class ChessBoard {
     // immediate diagonles pwn 
     let check = false;
 
-    const callBack = (movePos: PiecePos, checkEveyMove = false) => {
+    const callBack = (movePos: IPiecePos, piecesToLookOutFor: string[], checkEveyMove = false) => {
       const [exists, oppPiece] = this.IsOppPiece(...movePos, attackingPiece);
       if (!exists) return true;
 
-      if (oppPiece?.name() === 'Queen' || oppPiece?.name() === 'Bishop') {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      if (piecesToLookOutFor.includes(oppPiece!.name())) {
         check = true;
         return false;
       } else {
+        // here it would mean that piece countered its own piece
         if (!checkEveyMove) return false;
       }
     };
-    const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece) ? this.kingPos[0] : this.kingPos[1];
+    const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece) ? this.kingPos[1] : this.kingPos[0];
+    console.log('king row col',row,col);
+    traversLeftDownDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    if (check) return true;
+    traversRightDownDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    if (check) return true;
+    traversLeftUpDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    if (check) return true;
+    traversRightUpDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    if (check) return true;
 
-    traversLeftDownDiagonaly(row, col).every((move) => callBack(move));
+    traverseDownVerticaly(row, col).every((move) => callBack(move,['Queen','Rook']));
     if (check) return true;
-    traversRightDownDiagonaly(row, col).every((move) => callBack(move));
+    traverseUpVerticaly(row, col).every((move) => callBack(move,['Queen','Rook']));
     if (check) return true;
-    traversLeftUpDiagonaly(row, col).every((move) => callBack(move));
+    traverseLeftHorizontly(row, col).every((move) => callBack(move,['Queen','Rook']));
     if (check) return true;
-    traversRightUpDiagonaly(row, col).every((move) => callBack(move));
-    if (check) return true;
-
-    traverseDownVerticaly(row, col).every((move) => callBack(move));
-    if (check) return true;
-    traverseUpVerticaly(row, col).every((move) => callBack(move));
-    if (check) return true;
-    traverseLeftHorizontly(row, col).every((move) => callBack(move));
-    if (check) return true;
-    traverseRightHorizontly(row, col).every((move) => callBack(move));
+    traverseRightHorizontly(row, col).every((move) => callBack(move,['Queen','Rook']));
     if (check) return true;
 
     // [1,-1],[1,1]
-
     // immediate upperpawns
-    [[-1, -1], [-1, 1]].every((movePos) => {
+    [[-1+row, -1+col], [-1+row, 1+col]].filter(mv => (mv[0] < 8 && mv[1] > -1))
+      .every((movePos) => {
 
-      // this code here checks if kings immediate diagonlas are opp pawns and can it the king
-      const [exists, oppPiece] = this.IsOppPiece(...movePos as PiecePos, attackingPiece);
-      if (!exists) return true;
+        // this code here checks if kings immediate diagonlas are opp pawns and can it the king
+        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
+        if (!exists) return true;
 
-      if (oppPiece?.name() === 'Pawn') {
-        if (!(oppPiece as Pawn).placedOnBottomSide) {
-          check = true;
-          return false;
+        if (oppPiece?.name() === 'Pawn') {
+          if (!(oppPiece as Pawn).placedOnBottomSide) {
+            check = true;
+            return false;
+          }
         }
-      }
-    });
+      });
     if (check) return true;
 
     // this code here checks if kings immediate diagonlas are opp pawns and can it the king
-    [[1, -1], [1, 1]].every((movePos) => {
+    [[1+row, -1+col], [1+row, 1+col]].filter(mv => (mv[0] < 8 && mv[1] > -1))
+      .every((movePos) => {
 
-      const [exists, oppPiece] = this.IsOppPiece(...movePos as PiecePos, attackingPiece);
-      if (!exists) return true;
+        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
+        if (!exists) return true;
 
-      if (oppPiece?.name() === 'Pawn') {
-        if ((oppPiece as Pawn).placedOnBottomSide) {
-          check = true;
-          return false;
+        if (oppPiece?.name() === 'Pawn') {
+          if ((oppPiece as Pawn).placedOnBottomSide) {
+            check = true;
+            return false;
+          }
         }
-      }
-    });
+      });
     if (check) return true;
 
-    traverseKnightMoves(row, col).every((move) => callBack(move, true));
+    traverseKnightMoves(row, col).every((move) => callBack(move,['Knight'],true));
     if (check) return true;
 
-    traverseKingMoves(row, col).every((move) => callBack(move, true));
+    traverseKingMoves(row, col).every((move) => callBack(move,['Knight'], true));
     if (check) return true;
 
     return false;
@@ -198,26 +204,27 @@ class ChessBoard {
     return this._board;
   }
 
-  public set board(board: Board) {
+  public set board(board: IBoard) {
     this._board = board;
   }
 
-  getPiece(row: number, col: number): ChessPiece | null {
+  getPiece(row: number, col: number): IChessPiece | null {
     if (row < 0 || row > 7 || col < 0 || col > 7) {
-      throw new Error('row or col values cant exede chess board size limit');
+      throw new Error(`row${row} or col${col} values cant exede chess board size limit `);
     }
 
     return this._board[row][col];
   }
 
-  IsOppPiece(row: number, col: number, piece: ChessPiece): [boolean, ChessPiece | null] {
+  IsOppPiece(row: number, col: number, piece: IChessPiece): [boolean, IChessPiece | null] {
     const pieceToCheck = this.getPiece(row, col);
     if (!pieceToCheck) return [false, pieceToCheck];
     return [pieceToCheck.belongsTo !== piece.belongsTo, pieceToCheck];
   }
   
-  movePiece(row: number, col: number, piece: Piece | null) {
+  movePiece(row: number, col: number, piece: IChessPiece | null) {
     this._board[row][col] = piece;
+    if(piece) piece.setPos(row,col);
   }
 }
 export { makeChessBoard, makePiece, ChessBoard };

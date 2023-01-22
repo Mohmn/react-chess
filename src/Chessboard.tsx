@@ -2,7 +2,8 @@
 import React, { useState, useRef } from 'react';
 import Player from './objects/Player';
 import { makeChessBoard } from './objects/ChessBoard';
-import { ChessPiece, PiecePos, ArraySetType } from './objects/types';
+import { IChessPiece, IPiecePos, IArraySetType, IBoard } from './objects/types';
+import { ChessBoard } from './objects/ChessBoard';
 
 const p1 = new Player('sm');
 const p2 = new Player('cp');
@@ -11,10 +12,11 @@ const p2 = new Player('cp');
 
 function Chessboard() {
   
-  const [chessboard, setChessboard] = useState(() => makeChessBoard([p2, p1]));
-  const [locationsToHighLight,setLocationsToHighLight] = useState<ArraySetType | null>(null);
-  const [selectedSquareLoc, setSelectedSquareLoc] = useState<PiecePos | null>(null);
+  const [chessboard, setChessboard] = useState<IBoard>(() => makeChessBoard([p2, p1]));
+  const [locationsToHighLight,setLocationsToHighLight] = useState<IArraySetType | null>(null);
+  const [selectedSquareLoc, setSelectedSquareLoc] = useState<IPiecePos | null>(null);
   const currentPlayer = useRef(p1);
+  const chessBoardRef = useRef(new ChessBoard([p2, p1]));
 
   function switchPlayers () {
     const player = currentPlayer.current;
@@ -22,7 +24,7 @@ function Chessboard() {
     currentPlayer.current = player.type === p1.type ? p2 : p1;
   }
 
-  function updateChessBoard(nextLoc: PiecePos) {
+  function updateChessBoard(nextLoc: IPiecePos) {
 
     const [nextRowPos, nextColPos] = nextLoc;
     setChessboard((previousChessboard) => {
@@ -33,13 +35,14 @@ function Chessboard() {
 			selectedPiece!.setPos(nextRowPos,nextColPos);
 			newChessboard[nextRowPos][nextColPos] = selectedPiece;
 			newChessboard[rowLoc][colLoc] = null;
+			chessBoardRef.current.board = newChessboard;
 			return newChessboard;
     });
   }
 
-  function highLightPieceMoves(piece: ChessPiece) {
+  function highLightPieceMoves(piece: IChessPiece) {
     if(locationsToHighLight) return;
-    const locations = piece.availableMoves(chessboard);
+    const locations = piece.availableMoves(chessBoardRef.current);
     setLocationsToHighLight(locations);
   }
 
@@ -48,7 +51,7 @@ function Chessboard() {
     setLocationsToHighLight(null);
   }
 
-  function userCLickedOnItsOwnPiece(piece:ChessPiece) {
+  function userCLickedOnItsOwnPiece(piece:IChessPiece) {
     return piece.belongsTo === currentPlayer.current;
   }
 
