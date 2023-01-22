@@ -11,8 +11,8 @@ import {
   traversLeftDownDiagonaly,
   traverseKnightMoves,
   traverseKingMoves,
+  IsValidMove
 } from './Pieces/util';
-import { Console } from 'console';
 
 function makePiece(pos: number[], belongsTo: IChessPlayer, type: string): IChessPiece {
 
@@ -137,7 +137,7 @@ class ChessBoard implements IChessBoard {
         if (!checkEveyMove) return false;
       }
     };
-    const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece) ? this.kingPos[1] : this.kingPos[0];
+    const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
     console.log('king row col',row,col);
     traversLeftDownDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
     if (check) return true;
@@ -159,7 +159,7 @@ class ChessBoard implements IChessBoard {
 
     // [1,-1],[1,1]
     // immediate upperpawns
-    [[-1+row, -1+col], [-1+row, 1+col]].filter(mv => (mv[0] < 8 && mv[1] > -1))
+    [[-1+row, -1+col], [-1+row, 1+col]].filter(mv => IsValidMove(mv[0],mv[1]))
       .every((movePos) => {
 
         // this code here checks if kings immediate diagonlas are opp pawns and can it the king
@@ -176,7 +176,7 @@ class ChessBoard implements IChessBoard {
     if (check) return true;
 
     // this code here checks if kings immediate diagonlas are opp pawns and can it the king
-    [[1+row, -1+col], [1+row, 1+col]].filter(mv => (mv[0] < 8 && mv[1] > -1))
+    [[1+row, -1+col], [1+row, 1+col]].filter(mv => IsValidMove(mv[0],mv[1]))
       .every((movePos) => {
 
         const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
@@ -209,7 +209,7 @@ class ChessBoard implements IChessBoard {
   }
 
   getPiece(row: number, col: number): IChessPiece | null {
-    if (row < 0 || row > 7 || col < 0 || col > 7) {
+    if (!IsValidMove(row,col)) {
       throw new Error(`row${row} or col${col} values cant exede chess board size limit `);
     }
 

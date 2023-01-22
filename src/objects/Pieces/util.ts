@@ -95,8 +95,8 @@ function traverseKnightMoves(row: number, col: number): IPiecePos[] {
   for (let i = 0; i < knightsAllAvailableMoves.length; i++) {
 
     const pos = knightsAllAvailableMoves[i];
-    const validRow = ((row + pos[0]) <= 7 && (row + pos[0]) >= 0);
-    const validCol = ((col + pos[1]) <= 7 && (col + pos[1]) >= 0);
+    const validRow = IsValidMove(row + pos[0], row + pos[0]);
+    const validCol = IsValidMove(col + pos[1], col + pos[1]);
 
     if (validCol && validRow) {
       moves.push([row + pos[0], col + pos[1]]);
@@ -112,8 +112,8 @@ function traverseKingMoves(row: number, col: number): IPiecePos[] {
   for (let i = 0; i < kingsAllAvailableMoves.length; i++) {
 
     const pos = kingsAllAvailableMoves[i];
-    const validRow = ((row + pos[0]) <= 7 && (row + pos[0]) >= 0);
-    const validCol = ((col + pos[1]) <= 7 && (col + pos[1]) >= 0);
+    const validRow = IsValidMove(row + pos[0], row + pos[0]);
+    const validCol = IsValidMove(col + pos[1], col + pos[1]);
 
     if (validCol && validRow) {
       moves.push([row + pos[0], col + pos[1]]);
@@ -123,7 +123,14 @@ function traverseKingMoves(row: number, col: number): IPiecePos[] {
   return moves;
 }
 
+function IsValidMove(row:number,col:number): boolean {
+  const validRow = (row < 8 && row > - 1);
+  const validCol = (col < 8 && col > -1);
+  return validRow && validCol;
+}
+
 export {
+  IsValidMove, 
   traverseDownVerticaly,
   traverseUpVerticaly,
   traverseLeftHorizontly,
