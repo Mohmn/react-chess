@@ -1,6 +1,7 @@
 import ArraySet from '../../ArraySet';
-import { IArraySetType, IBoard, IChessBoard, IChessPlayer, IPiecePos } from '../../types';
+import { IArraySetType, IChessBoard, IChessPlayer, IPiecePos } from '../../types';
 import { Piece } from '../Piece';
+import { traverseKnightMoves } from '../util';
 
 class Knight extends Piece {
   // representation for now is going to alphabets
@@ -10,32 +11,11 @@ class Knight extends Piece {
   }
 
   availableMoves(board: IChessBoard): IArraySetType {
-    // todo add further validation
     const moves = new ArraySet();
-    moves.add(board.validMoves(this.moves(), this));
+    moves.add(board.validMoves(traverseKnightMoves(this.row, this.col), this));
     return moves;
   }
 
-  private moves(): IPiecePos[] {
-    const knightsAllAvailableMoves: IPiecePos[] = [
-      [-2, 1], [-2, -1], [2, 1], [2, -1],
-      [-1, 2], [-1, -2], [1, 2], [1, -2]
-    ];
-
-    const moves: IPiecePos[] = [];
-    for (let i = 0; i < knightsAllAvailableMoves.length; i++) {
-
-      const pos = knightsAllAvailableMoves[i];
-      const validRow = ((this.row + pos[0]) < 8 && (this.row + pos[0]) > -1);
-      const validCol = ((this.col + pos[1]) < 8 && (this.col + pos[1]) > -1);
-
-      if (validCol && validRow) {
-        moves.push([this.row + pos[0], this.col + pos[1]]);
-      }
-    }
-
-    return moves;
-  }
 
 }
 

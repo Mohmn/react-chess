@@ -22,12 +22,16 @@ class Bishop extends Piece {
     const leftDgnDownMoves = traversLeftDownDiagonaly(this.row, this.col);
 
     const moves = new ArraySet();
-    moves.add([
-      ...rightDgnUpMoves,
-      ...rightDgnDwnMoves,
-      ...leftDgnUpMoves,
-      ...leftDgnDownMoves,
-    ]);
+    moves.add(
+      board.validMoves(
+        [
+          ...rightDgnUpMoves,
+          ...rightDgnDwnMoves,
+          ...leftDgnUpMoves,
+          ...leftDgnDownMoves,
+        ],
+        this)
+    );
     return moves;
   }
 }

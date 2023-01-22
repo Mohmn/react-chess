@@ -1,5 +1,5 @@
 import { Piece } from '../Piece';
-import { IBoard, IChessBoard, IChessPlayer, IPiecePos } from '../../types';
+import { IChessBoard, IChessPlayer, IPiecePos } from '../../types';
 import ArraySet from '../../ArraySet';
 
 class Pawn extends Piece {
@@ -17,18 +17,18 @@ class Pawn extends Piece {
   availableMoves (board: IChessBoard) {
     // for now only return vertical movment
     console.log('moves', this.placedOnBottomSide);
-
-    return this._verticalMovement();
+    const moves: ArraySet = new ArraySet();
+    moves.add(board.validMoves(this._verticalMovement(), this));
+    return moves;
   }
 
   // movent for pawn goin up
   _upLoop (initTialPos: number, finalPos: number) {
-    const moves: ArraySet = new ArraySet();
+    const moves: IPiecePos[] = [];
     initTialPos = initTialPos + this._inc;
     // eslint-disable-next-line for-direction
     for (let i = initTialPos; i >= finalPos; i += this._inc) {
-      console.log('i', i);
-      moves.add([i, this.col]);
+      moves.push([i, this.col]);
     }
 
     return moves;
@@ -36,10 +36,10 @@ class Pawn extends Piece {
 
   // movent for pawn goin down
   _downLoop (initTialPos: number, finalPos: number) {
-    const moves: ArraySet = new ArraySet();
+    const moves: IPiecePos[] = [];
     initTialPos = initTialPos + this._inc;
     for (let i = initTialPos; i <= finalPos; i += this._inc) {
-      moves.add([i, this.col]);
+      moves.push([i, this.col]);
     }
 
     return moves;

@@ -25,12 +25,16 @@ class Rook extends Piece {
     const verticalUpMoves = traverseUpVerticaly(this.row,this.col);
     const verticalDownMoves = traverseDownVerticaly(this.row,this.col);
 
-    moves.add([
-      ...horizontalLeftMoves,
-      ...horizontalRightMoves,
-      ...verticalUpMoves,
-      ...verticalDownMoves,
-    ]);
+    moves.add(
+      board.validMoves(
+        [
+          ...horizontalLeftMoves,
+          ...horizontalRightMoves,
+          ...verticalUpMoves,
+          ...verticalDownMoves,
+        ]
+        ,this)
+    );
 
     return moves;
 
