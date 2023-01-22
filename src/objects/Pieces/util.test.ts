@@ -6,7 +6,9 @@ import {
   traversRightUpDiagonaly,
   traversRightDownDiagonaly,
   traversLeftUpDiagonaly,
-  traversLeftDownDiagonaly
+  traversLeftDownDiagonaly,
+  traverseKnightMoves,
+  traverseKingMoves,
 } from './util';
 
 describe('test util traversing funcs', () => {
@@ -56,6 +58,24 @@ describe('test util traversing funcs', () => {
   it('diagonal traverse left up test', () => {
     const moves = traversRightUpDiagonaly(3, 5);
     const expectedMoves = [[2, 6], [1, 7]];
+    expect(moves).toEqual(expectedMoves);
+  });
+
+  it('test knight moves', () => {
+    const moves = traverseKnightMoves(5, 5);
+    const expectedMoves = [
+      [3, 6], [3, 4], [7, 6], [7, 4],
+      [4, 7], [4, 3], [6, 7], [6, 3]
+    ];
+    expect(moves).toEqual(expectedMoves);
+  });
+
+  it('test King moves', () => {
+    const moves = traverseKingMoves(5, 5);
+    const expectedMoves = [
+      [4, 6], [4, 4], [6, 6], [6, 4],
+      [6, 5], [4, 5], [5, 6], [5, 4]
+    ];
     expect(moves).toEqual(expectedMoves);
   });
 });

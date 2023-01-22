@@ -1,12 +1,12 @@
 import { Piece } from '../Piece';
-import { Board, ChessPlayer, PiecePos } from '../../types';
+import { IBoard, IChessBoard, IChessPlayer, IPiecePos } from '../../types';
 import ArraySet from '../../ArraySet';
 
 class Pawn extends Piece {
   firstMove = true;
   placedOnBottomSide = false;
   _inc = 1;
-  constructor (i: number, j: number, belongsTo: ChessPlayer, representation: string) {
+  constructor (i: number, j: number, belongsTo: IChessPlayer, representation: string) {
     super(i, j, belongsTo, representation);
     this.placedOnBottomSide = (i === 6);
     this._inc = this.placedOnBottomSide ? -1 : 1;
@@ -14,7 +14,7 @@ class Pawn extends Piece {
 
   // todo make consider diagonal eating pos
 
-  availableMoves (board: Board) {
+  availableMoves (board: IChessBoard) {
     // for now only return vertical movment
     console.log('moves', this.placedOnBottomSide);
 

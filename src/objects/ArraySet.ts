@@ -1,10 +1,10 @@
-import {PiecePos, ArraySetType} from './types';
+import {IPiecePos, IArraySetType} from './types';
 
-export default class ArraySet implements ArraySetType {
+export default class ArraySet implements IArraySetType {
 
   private uniqueElms = new Set<string>();
   
-  add(pos: PiecePos | PiecePos[]) {
+  add(pos: IPiecePos | IPiecePos[]) {
     if(Array.isArray(pos[0])) {
       for (let i=0;i<pos.length;i++) {
         const stringfiedValue = JSON.stringify(pos[i]);
@@ -17,18 +17,18 @@ export default class ArraySet implements ArraySetType {
     this.uniqueElms.add(stringfiedValue);
   }
 
-  has(pos: PiecePos): boolean {
+  has(pos: IPiecePos): boolean {
     const stringfiedValue = JSON.stringify(pos);
     return this.uniqueElms.has(stringfiedValue);
   }
 
-  toArray(): Array<PiecePos> {
+  toArray(): Array<IPiecePos> {
     const pos = [];
 
     const itr = this.uniqueElms.values() ;
     let strPos = itr.next();
     while(!strPos.done){
-      pos.push(JSON.parse(strPos.value) as PiecePos);
+      pos.push(JSON.parse(strPos.value) as IPiecePos);
       strPos = itr.next();
     }
     return pos;

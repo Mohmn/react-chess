@@ -1,6 +1,6 @@
-import { ChessPlayer } from './types';
+import { IChessPlayer } from './types';
 
-class Player implements ChessPlayer {
+class Player implements IChessPlayer {
 
   private _turnType = {
     first: 'first',

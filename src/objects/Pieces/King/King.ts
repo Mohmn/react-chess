@@ -1,27 +1,27 @@
 import ArraySet from '../../ArraySet';
-import { ArraySetType, Board, ChessPlayer, PiecePos } from '../../types';
+import { IArraySetType, IBoard, IChessBoard, IChessPlayer, IPiecePos } from '../../types';
 import { Piece } from '../Piece';
 
 class King extends Piece {
 
-  constructor(i: number, j: number, belongsTo: ChessPlayer, representation: string) {
+  constructor(i: number, j: number, belongsTo: IChessPlayer, representation: string) {
     super(i, j, belongsTo, representation);
   }
 
-  availableMoves(board: Board): ArraySetType {
+  availableMoves(board: IChessBoard): IArraySetType {
     // todo add further validation
     const moves = new ArraySet();
     moves.add(this.moves());
     return moves;
   }
 
-  private moves(): PiecePos[] {
-    const kingsAllAvailableMoves: PiecePos[] = [
+  private moves(): IPiecePos[] {
+    const kingsAllAvailableMoves: IPiecePos[] = [
       [-1, 1], [-1, -1], [1, 1], [1, -1],
       [1, 0], [-1, 0], [0, 1], [0, -1]
     ];
 
-    const moves: PiecePos[] = [];
+    const moves: IPiecePos[] = [];
     for (let i = 0; i < kingsAllAvailableMoves.length; i++) {
 
       const pos = kingsAllAvailableMoves[i];

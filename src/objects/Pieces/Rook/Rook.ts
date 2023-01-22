@@ -5,17 +5,17 @@ import {
   traverseRightHorizontly,
 } from '../util';
 import { Piece } from '../Piece';
-import { Board, ChessPlayer } from '../../types';
+import { IBoard, IChessBoard, IChessPlayer } from '../../types';
 import ArraySet from '../../ArraySet';
 
 class Rook extends Piece {
   // representation for now is going to alphabets
   // later on it will be links to icons or images
-  constructor(i: number, j: number, belongsTo: ChessPlayer, representation: string) {
+  constructor(i: number, j: number, belongsTo: IChessPlayer, representation: string) {
     super(i, j, belongsTo, representation);
   }
 
-  availableMoves(board: Board): ArraySet {
+  availableMoves(board: IChessBoard): ArraySet {
     const moves = new ArraySet();
 
     // Todp: checks to make here for checking opp players

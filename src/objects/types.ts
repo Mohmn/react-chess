@@ -1,5 +1,4 @@
-
-interface ChessPlayer {
+interface IChessPlayer {
 
   type: string;
 
@@ -10,21 +9,21 @@ interface ChessPlayer {
   secondTurn: () => boolean;
 }
 
-type Board = (ChessPiece | null)[][];
+type IBoard = (IChessPiece | null)[][];
 
-type PiecePos = [number, number];
+type IPiecePos = [number, number];
 
-interface ChessPiece {
+interface IChessPiece {
 
   row: number;
 
   col: number;
 
-  belongsTo: ChessPlayer;
+  belongsTo: IChessPlayer;
 
   representation: string;
 
-  getPos: () => PiecePos;
+  getPos: () => IPiecePos;
 
   getRow: () => number;
 
@@ -34,25 +33,33 @@ interface ChessPiece {
 
   render: () => string;
 
-  availableMoves: (board: Board) => ArraySetType;
-
-  validMoves(moves: PiecePos[], board: Board): PiecePos[];
+  availableMoves: (board: IChessBoard) => IArraySetType;
 
   name(): string;
 }
 
-interface ArraySetType {
-  add: (pos: PiecePos | PiecePos[]) => void;
-  has: (pos: PiecePos) => boolean;
-  toArray(): Array<PiecePos>;
+interface IChessBoard {
+  board: IBoard;
+  player1: IChessPlayer;
+  player2: IChessPlayer;
+  kingPos: IPiecePos[];
+  validMoves: (moves: IPiecePos[], attackingPiece: IChessPiece) => IPiecePos[];
+  getPiece: (row: number, col: number) => IChessPiece | null;
+  IsOppPiece: (row: number, col: number, piece: IChessPiece) => [boolean, IChessPiece | null];
+  movePiece: (row: number, col: number, piece: IChessPiece | null) => void;
+}
+
+interface IArraySetType {
+  add: (pos: IPiecePos | IPiecePos[]) => void;
+  has: (pos: IPiecePos) => boolean;
+  toArray(): Array<IPiecePos>;
 }
 
 export type {
-
-  ChessPiece,
-  Board,
-  ChessPlayer,
-  PiecePos,
-  ArraySetType
-
+  IChessPiece,
+  IBoard,
+  IChessPlayer,
+  IPiecePos,
+  IArraySetType,
+  IChessBoard
 };

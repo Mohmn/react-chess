@@ -1,19 +1,20 @@
 import {
-  Board,
-  ChessPiece,
-  ChessPlayer,
-  PiecePos,
-  ArraySetType
+  IBoard,
+  IChessPiece,
+  IChessPlayer,
+  IPiecePos,
+  IArraySetType,
+  IChessBoard
 } from '../types';
 
-abstract class Piece implements ChessPiece {
+abstract class Piece implements IChessPiece {
 
   row: number;
   col: number;
-  belongsTo: ChessPlayer;
+  belongsTo: IChessPlayer;
   representation: string;
 
-  constructor(row: number, col: number, belongsTo: ChessPlayer, representation: string) {
+  constructor(row: number, col: number, belongsTo: IChessPlayer, representation: string) {
     this.row = row;
     this.col = col;
     this.belongsTo = belongsTo;
@@ -22,13 +23,13 @@ abstract class Piece implements ChessPiece {
 
   // abstract makeNoise(): void;
 
-  abstract availableMoves(board: Board): ArraySetType;
+  abstract availableMoves(board: IChessBoard): IArraySetType;
 
   render() {
     return this.representation;
   }
 
-  getPos(): PiecePos {
+  getPos(): IPiecePos {
     return [this.row, this.col];
   }
 
@@ -43,16 +44,6 @@ abstract class Piece implements ChessPiece {
   setPos(row: number, col: number) {
     this.row = row;
     this.col = col;
-  }
-
-  validMoves(moves: PiecePos[], board: Board): PiecePos[] {
-
-    // later on addCheck checks too
-    return moves.filter(move => {
-      const boardInfo = board[move[0]][move[1]];
-      if (!boardInfo) return true;
-      return boardInfo.belongsTo !== this.belongsTo;
-    });
   }
 
   name() {
