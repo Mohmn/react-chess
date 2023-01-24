@@ -11,7 +11,12 @@ class King extends Piece {
 
   availableMoves(board: IChessBoard): IArraySetType {
     const moves = new ArraySet();
-    moves.add(board.validMoves(traverseKingMoves(this.row, this.col), this));
+    const filteredMoves = this.filterAttackOnOwnPieces(
+      traverseKingMoves(this.row, this.col),
+      board,
+      true
+    );
+    moves.add(board.validMoves(filteredMoves, this));
     return moves;
   }
 

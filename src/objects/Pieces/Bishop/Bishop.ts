@@ -5,7 +5,7 @@ import {
   traversLeftDownDiagonaly
 } from '../util';
 import { Piece } from '../Piece';
-import { IArraySetType, IBoard, IChessBoard, IChessPlayer } from '../../types';
+import { IArraySetType, IChessBoard, IChessPlayer } from '../../types';
 import ArraySet from '../../ArraySet';
 
 class Bishop extends Piece {
@@ -25,15 +25,16 @@ class Bishop extends Piece {
     moves.add(
       board.validMoves(
         [
-          ...rightDgnUpMoves,
-          ...rightDgnDwnMoves,
-          ...leftDgnUpMoves,
-          ...leftDgnDownMoves,
+          ...this.filterAttackOnOwnPieces(rightDgnUpMoves, board),
+          ...this.filterAttackOnOwnPieces(rightDgnDwnMoves, board),
+          ...this.filterAttackOnOwnPieces(leftDgnUpMoves, board),
+          ...this.filterAttackOnOwnPieces(leftDgnDownMoves, board),
         ],
         this)
     );
     return moves;
   }
+  
 }
 
 export { Bishop };

@@ -1,5 +1,4 @@
 import {
-  IBoard,
   IChessPiece,
   IChessPlayer,
   IPiecePos,
@@ -49,7 +48,23 @@ abstract class Piece implements IChessPiece {
   name() {
     return this.constructor.name;
   }
-  // check(board)
+  
+  protected filterAttackOnOwnPieces(moves: IPiecePos[], board: IChessBoard, checkEachMove = false) {
+    const filterdMoves: IPiecePos[] = [];
+    for (let i = 0; i < moves.length; i++) {
+      const move = [moves[i][0], moves[i][1]];
+      const piece = board.getPiece(move[0], move[1]);
+      if (!piece) filterdMoves.push([move[0], move[1]]);
+      else {
+        const oppPiece = piece.belongsTo !== this.belongsTo;
+        if (oppPiece) {
+          filterdMoves.push([move[0], move[1]]);
+        }
+        if(!checkEachMove) break;
+      }
+    }
+    return filterdMoves;
+  }
 
 }
 

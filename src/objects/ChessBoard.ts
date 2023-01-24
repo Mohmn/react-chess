@@ -93,7 +93,7 @@ class ChessBoard implements IChessBoard {
   validMoves(moves: IPiecePos[], attackingPiece: IChessPiece): IPiecePos[] {
 
     // later on addCheck checks too
-    return this.filterAttackOnOwnPieces(moves, attackingPiece).filter((move) => {
+    return moves.filter((move) => {
       const [row, col] = move;
       const [aRow, aCol] = attackingPiece.getPos();
       const currentPiece = this.getPiece(row, col);
@@ -103,14 +103,6 @@ class ChessBoard implements IChessBoard {
       this.movePiece(row, col, currentPiece);
       this.movePiece(aRow,aCol,attackingPiece);
       return !moveWouldCauseCheck;
-    });
-  }
-
-  private filterAttackOnOwnPieces(moves: IPiecePos[], attackingPiece: IChessPiece) {
-    return moves.filter(move => {
-      const piece = this.getPiece(move[0], move[1]);
-      if (!piece) return true;
-      return piece.belongsTo !== attackingPiece.belongsTo;
     });
   }
 
@@ -138,28 +130,28 @@ class ChessBoard implements IChessBoard {
       }
     };
     const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
-    console.log('king row col',row,col);
-    traversLeftDownDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    console.log('king row col', row, col);
+    traversLeftDownDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
     if (check) return true;
-    traversRightDownDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    traversRightDownDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
     if (check) return true;
-    traversLeftUpDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    traversLeftUpDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
     if (check) return true;
-    traversRightUpDiagonaly(row, col).every((move) => callBack(move,['Queen','Bishop']));
+    traversRightUpDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
     if (check) return true;
 
-    traverseDownVerticaly(row, col).every((move) => callBack(move,['Queen','Rook']));
+    traverseDownVerticaly(row, col).every((move) => callBack(move, ['Queen', 'Rook']));
     if (check) return true;
-    traverseUpVerticaly(row, col).every((move) => callBack(move,['Queen','Rook']));
+    traverseUpVerticaly(row, col).every((move) => callBack(move, ['Queen', 'Rook']));
     if (check) return true;
-    traverseLeftHorizontly(row, col).every((move) => callBack(move,['Queen','Rook']));
+    traverseLeftHorizontly(row, col).every((move) => callBack(move, ['Queen', 'Rook']));
     if (check) return true;
-    traverseRightHorizontly(row, col).every((move) => callBack(move,['Queen','Rook']));
+    traverseRightHorizontly(row, col).every((move) => callBack(move, ['Queen', 'Rook']));
     if (check) return true;
 
     // [1,-1],[1,1]
     // immediate upperpawns
-    [[-1+row, -1+col], [-1+row, 1+col]].filter(mv => IsValidMove(mv[0],mv[1]))
+    [[-1 + row, -1 + col], [-1 + row, 1 + col]].filter(mv => IsValidMove(mv[0], mv[1]))
       .every((movePos) => {
 
         // this code here checks if kings immediate diagonlas are opp pawns and can it the king
@@ -176,7 +168,7 @@ class ChessBoard implements IChessBoard {
     if (check) return true;
 
     // this code here checks if kings immediate diagonlas are opp pawns and can it the king
-    [[1+row, -1+col], [1+row, 1+col]].filter(mv => IsValidMove(mv[0],mv[1]))
+    [[1 + row, -1 + col], [1 + row, 1 + col]].filter(mv => IsValidMove(mv[0], mv[1]))
       .every((movePos) => {
 
         const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
@@ -191,10 +183,10 @@ class ChessBoard implements IChessBoard {
       });
     if (check) return true;
 
-    traverseKnightMoves(row, col).every((move) => callBack(move,['Knight'],true));
+    traverseKnightMoves(row, col).every((move) => callBack(move, ['Knight'], true));
     if (check) return true;
 
-    traverseKingMoves(row, col).every((move) => callBack(move,['Knight'], true));
+    traverseKingMoves(row, col).every((move) => callBack(move, ['Knight'], true));
     if (check) return true;
 
     return false;

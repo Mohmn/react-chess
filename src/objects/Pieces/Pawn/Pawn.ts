@@ -14,16 +14,17 @@ class Pawn extends Piece {
 
   // todo make consider diagonal eating pos
 
-  availableMoves (board: IChessBoard) {
+  availableMoves(board: IChessBoard) {
     // for now only return vertical movment
     console.log('moves', this.placedOnBottomSide);
     const moves: ArraySet = new ArraySet();
-    moves.add(board.validMoves(this._verticalMovement(), this));
+    const filteredMoves = this.filterAttackOnOwnPieces(this.verticalMovement(), board,true);
+    moves.add(board.validMoves(filteredMoves, this));
     return moves;
   }
 
   // movent for pawn goin up
-  _upLoop (initTialPos: number, finalPos: number) {
+  private upLoop (initTialPos: number, finalPos: number) {
     const moves: IPiecePos[] = [];
     initTialPos = initTialPos + this._inc;
     // eslint-disable-next-line for-direction
@@ -35,7 +36,7 @@ class Pawn extends Piece {
   }
 
   // movent for pawn goin down
-  _downLoop (initTialPos: number, finalPos: number) {
+  private downLoop (initTialPos: number, finalPos: number) {
     const moves: IPiecePos[] = [];
     initTialPos = initTialPos + this._inc;
     for (let i = initTialPos; i <= finalPos; i += this._inc) {
@@ -45,12 +46,14 @@ class Pawn extends Piece {
     return moves;
   }
 
-  _verticalMovement () {
+  private verticalMovement () {
     const rowPos = this.row;
     const maxDis = this.firstMove ? ((this._inc * 2) + rowPos) : ((this._inc * 1) + rowPos);
-    if (this.placedOnBottomSide) { return this._upLoop(rowPos, maxDis); }
-    return this._downLoop(rowPos, maxDis);
+    this.firstMove = false;
+    if (this.placedOnBottomSide) { return this.upLoop(rowPos, maxDis); }
+    return this.downLoop(rowPos, maxDis);
   }
+
 }
 
 export { Pawn };

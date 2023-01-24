@@ -12,10 +12,14 @@ class Knight extends Piece {
 
   availableMoves(board: IChessBoard): IArraySetType {
     const moves = new ArraySet();
-    moves.add(board.validMoves(traverseKnightMoves(this.row, this.col), this));
+    const filteredMoves = this.filterAttackOnOwnPieces(
+      traverseKnightMoves(this.row, this.col),
+      board,
+      true
+    );
+    moves.add(board.validMoves(filteredMoves, this));
     return moves;
   }
-
 
 }
 

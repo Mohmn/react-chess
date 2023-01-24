@@ -5,7 +5,7 @@ import {
   traverseRightHorizontly,
 } from '../util';
 import { Piece } from '../Piece';
-import { IBoard, IChessBoard, IChessPlayer } from '../../types';
+import { IChessBoard, IChessPlayer } from '../../types';
 import ArraySet from '../../ArraySet';
 
 class Rook extends Piece {
@@ -28,10 +28,10 @@ class Rook extends Piece {
     moves.add(
       board.validMoves(
         [
-          ...horizontalLeftMoves,
-          ...horizontalRightMoves,
-          ...verticalUpMoves,
-          ...verticalDownMoves,
+          ...this.filterAttackOnOwnPieces(horizontalLeftMoves,board),
+          ...this.filterAttackOnOwnPieces(horizontalRightMoves,board),
+          ...this.filterAttackOnOwnPieces(verticalUpMoves,board),
+          ...this.filterAttackOnOwnPieces(verticalDownMoves,board),
         ]
         ,this)
     );
@@ -39,6 +39,7 @@ class Rook extends Piece {
     return moves;
 
   }
+
 }
 
 export { Rook };
