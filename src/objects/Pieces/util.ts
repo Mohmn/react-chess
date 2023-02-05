@@ -129,6 +129,11 @@ function IsValidMove(row:number,col:number): boolean {
   return validRow && validCol;
 }
 
+function arePosEqual(pos1: IPiecePos | null, pos2: IPiecePos | null) {
+  if (!pos1 || !pos2) return false;
+  return (pos1[0] === pos2[0]) && (pos1[1] === pos2[1]);
+}
+
 export {
   IsValidMove, 
   traverseDownVerticaly,
@@ -141,4 +146,5 @@ export {
   traversLeftDownDiagonaly,
   traverseKnightMoves,
   traverseKingMoves,
+  arePosEqual,
 };

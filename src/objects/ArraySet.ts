@@ -27,7 +27,7 @@ export default class ArraySet implements IArraySetType {
 
     const itr = this.uniqueElms.values() ;
     let strPos = itr.next();
-    while(!strPos.done){
+    while(!strPos.done) {
       pos.push(JSON.parse(strPos.value) as IPiecePos);
       strPos = itr.next();
     }

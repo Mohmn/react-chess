@@ -5,6 +5,7 @@ import {
   IArraySetType,
   IChessBoard
 } from '../types';
+import { Pawn } from './Pawn/Pawn';
 
 abstract class Piece implements IChessPiece {
 
@@ -41,6 +42,10 @@ abstract class Piece implements IChessPiece {
   }
 
   setPos(row: number, col: number) {
+    // if (this.name() === 'Pawn') {
+    //   (this as unknown as Pawn).firstMove = false;
+    //   return;
+    // }
     this.row = row;
     this.col = col;
   }

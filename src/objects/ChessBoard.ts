@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IChessPiece, IChessPlayer, IBoard, IPiecePos, IChessBoard } from './types';
 import { Pawn, Knight, King, Queen, Rook, Bishop } from './Pieces';
 import {
@@ -107,6 +108,11 @@ class ChessBoard implements IChessBoard {
   }
 
   private moveWouldCauseCheck(attackingPiece: IChessPiece) {
+    const kPos = this.IsOppPiece(...this.kingPos[0], attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
+    return this.isKingInCheck(kPos);
+  }
+
+  private isKingInCheck(kingsPos: IPiecePos) {
     // let that move happen
     // after that check for is king in danger
     // king in danger means
@@ -115,13 +121,13 @@ class ChessBoard implements IChessBoard {
     // then check for opp knight
     // immediate diagonles pwn 
     let check = false;
-
+    const king = this.getPiece(...kingsPos);
     const callBack = (movePos: IPiecePos, piecesToLookOutFor: string[], checkEveyMove = false) => {
-      const [exists, oppPiece] = this.IsOppPiece(...movePos, attackingPiece);
-      if (!exists) return true;
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (piecesToLookOutFor.includes(oppPiece!.name())) {
+      const [exists, oppPiece] = this.IsOppPiece(...movePos, king!);
+      if (!oppPiece) return true;
+
+      if (exists && piecesToLookOutFor.includes(oppPiece.name())) {
         check = true;
         return false;
       } else {
@@ -129,8 +135,7 @@ class ChessBoard implements IChessBoard {
         if (!checkEveyMove) return false;
       }
     };
-    const [row, col] = this.IsOppPiece(...this.kingPos[0], attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
-    console.log('king row col', row, col);
+    const [row, col] = kingsPos;
     traversLeftDownDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
     if (check) return true;
     traversRightDownDiagonaly(row, col).every((move) => callBack(move, ['Queen', 'Bishop']));
@@ -155,7 +160,7 @@ class ChessBoard implements IChessBoard {
       .every((movePos) => {
 
         // this code here checks if kings immediate diagonlas are opp pawns and can it the king
-        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
+        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, king!);
         if (!exists) return true;
 
         if (oppPiece?.name() === 'Pawn') {
@@ -171,7 +176,7 @@ class ChessBoard implements IChessBoard {
     [[1 + row, -1 + col], [1 + row, 1 + col]].filter(mv => IsValidMove(mv[0], mv[1]))
       .every((movePos) => {
 
-        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, attackingPiece);
+        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos,king!);
         if (!exists) return true;
 
         if (oppPiece?.name() === 'Pawn') {
@@ -190,6 +195,15 @@ class ChessBoard implements IChessBoard {
     if (check) return true;
 
     return false;
+  }
+
+  isInCheck(p: IChessPlayer): IPiecePos | null {
+    const kingPos = this.getPiece(this.kingPos[0][0], this.kingPos[0][1])?.belongsTo === p
+      ? this.kingPos[0] : this.kingPos[1];
+    console.log('kingPos',kingPos);
+    if (this.isKingInCheck(kingPos))
+      return kingPos;
+    return null;
   }
 
   public get board() {

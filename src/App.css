@@ -1,5 +1,14 @@
+html, body{
+  height: 100%;
+}
+
+
 table {
   border-collapse: collapse;
+  max-width: 700px;
+  width: 40%;
+  margin: 0.5em auto;
+  max-height: 50%;
 }
 
 table,
@@ -41,5 +50,17 @@ body {
 }
 
 .highlight {
-  border: 2px solid greenyellow;
+  border: 4px solid greenyellow;
+}
+
+.coral {
+  border: 4px solid lightcoral;
+}
+
+.blue {
+  border: 4px solid lightblue;
+}
+
+.check {
+  border: 4px solid red;
 }
