@@ -18,8 +18,9 @@ class Pawn extends Piece {
     // for now only return vertical movment
     console.log('moves', this.placedOnBottomSide);
     const moves: ArraySet = new ArraySet();
-    const filteredMoves = this.filterAttackOnOwnPieces(this.verticalMovement(), board,true);
-    moves.add(board.validMoves(filteredMoves, this));
+    const vMoves = this.verticalMovement().filter(move => !board.getPiece(...move));
+    // const filteredMoves = this.filterAttackOnOwnPieces(this.verticalMovement(), board,true);
+    moves.add(board.validMoves(vMoves, this));
     return moves;
   }
 
