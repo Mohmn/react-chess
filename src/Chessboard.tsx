@@ -38,7 +38,7 @@ function Chessboard() {
     selectedPiece!.setPos(nextRowPos, nextColPos);
     newChessboard[nextRowPos][nextColPos] = selectedPiece;
     newChessboard[rowLoc][colLoc] = null;
-    console.log('up uhu ', rowLoc, colLoc, newChessboard[nextRowPos][nextColPos], ...nextLoc);
+    // console.log('up uhu ', rowLoc, colLoc, newChessboard[nextRowPos][nextColPos], ...nextLoc);
     chessBoardRef.current.board = newChessboard;
     return newChessboard;
   }
@@ -59,12 +59,18 @@ function Chessboard() {
   }
 
   function handleFirstTurn(piece: IChessPiece | null, player: IChessPlayer, pos: IPiecePos) {
-    if (piece) {
-      if (!userCLickedOnItsOwnPiece(piece)) return;
-      setSelectedSquareLoc(pos);
-      highLightPieceMoves(piece);
-      player.updateTurn();
-    }
+    if (!piece) return; 
+    if (!userCLickedOnItsOwnPiece(piece)) return;
+    setSelectedSquareLoc(pos);
+    highLightPieceMoves(piece);
+    player.updateTurn();
+
+  }
+
+  function checkforCheckAndCheckMate(player: IChessPlayer) {
+    const oppInCheck = chessBoardRef.current.isInCheck(player);
+    console.log('checkmate', chessBoardRef.current.checkMate(player));
+    oppInCheck && setIsInCheck(oppInCheck);
   }
 
   function handleSecondTurn(piece: IChessPiece | null, player: IChessPlayer, pos: IPiecePos) {
@@ -72,15 +78,17 @@ function Chessboard() {
     const legalMove = locationsToHighLight?.has(pos);
     if (legalMove) {
       setChessboard((previousChessBoard) => {
-        const newBoard = updateChessBoard(pos,previousChessBoard);
+        const newBoard = updateChessBoard(pos, previousChessBoard);
         unhighLightPieceMoves();
-        const checkToCheckFor = player === p1 ? p2 : p1;
-        const c = chessBoardRef.current.isInCheck(checkToCheckFor);
-        setIsInCheck(c);
         switchPlayers();
+        const checkToCheckFor = player === p1 ? p2 : p1;
+        // checkforCheckAndCheckMate(checkToCheckFor);
+        const oppInCheck = chessBoardRef.current.isInCheck(checkToCheckFor);
+        console.log('checkmate', chessBoardRef.current.checkMate(checkToCheckFor));
+        oppInCheck && setIsInCheck(oppInCheck);
         return newBoard;
       });
-    }else {
+    } else {
       unhighLightPieceMoves();
       player.updateTurn();
     }

@@ -42,7 +42,7 @@ interface IChessBoard {
   board: IBoard;
   player1: IChessPlayer;
   player2: IChessPlayer;
-  kingPos: IPiecePos[];
+  kingPos: { belongs: IChessPlayer, pos: IPiecePos }[],
   validMoves: (moves: IPiecePos[], attackingPiece: IChessPiece) => IPiecePos[];
   getPiece: (row: number, col: number) => IChessPiece | null;
   IsOppPiece: (row: number, col: number, piece: IChessPiece) => [boolean, IChessPiece | null];

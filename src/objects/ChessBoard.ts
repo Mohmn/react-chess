@@ -74,7 +74,7 @@ class ChessBoard implements IChessBoard {
   private _board: IBoard;
   player1: IChessPlayer;
   player2: IChessPlayer;
-  kingPos: IPiecePos[];
+  kingPos: { belongs: IChessPlayer, pos: IPiecePos }[];
 
   constructor(players: IChessPlayer[]) {
     this.player1 = players[0];
@@ -85,7 +85,7 @@ class ChessBoard implements IChessBoard {
       for (let j = 0; j < this._board.length; j++) {
         const piece = this._board[i][j];
         if (piece && piece.constructor.name === 'King') {
-          this.kingPos.push([i, j]);
+          this.kingPos.push({ belongs: piece.belongsTo, pos: [i, j] });
         }
       }
     }
@@ -93,7 +93,6 @@ class ChessBoard implements IChessBoard {
 
   validMoves(moves: IPiecePos[], attackingPiece: IChessPiece): IPiecePos[] {
 
-    // later on addCheck checks too
     return moves.filter((move) => {
       const [row, col] = move;
       const [aRow, aCol] = attackingPiece.getPos();
@@ -102,14 +101,14 @@ class ChessBoard implements IChessBoard {
       this.movePiece(aRow, aCol, null);
       const moveWouldCauseCheck = this.moveWouldCauseCheck(attackingPiece);
       this.movePiece(row, col, currentPiece);
-      this.movePiece(aRow,aCol,attackingPiece);
+      this.movePiece(aRow, aCol, attackingPiece);
       return !moveWouldCauseCheck;
     });
   }
 
   private moveWouldCauseCheck(attackingPiece: IChessPiece) {
-    const kPos = this.IsOppPiece(...this.kingPos[0], attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
-    return this.isKingInCheck(kPos);
+    const kPos = this.IsOppPiece(...this.kingPos[0].pos, attackingPiece)[0] ? this.kingPos[1] : this.kingPos[0];
+    return this.isKingInCheck(kPos.pos);
   }
 
   private isKingInCheck(kingsPos: IPiecePos) {
@@ -176,7 +175,7 @@ class ChessBoard implements IChessBoard {
     [[1 + row, -1 + col], [1 + row, 1 + col]].filter(mv => IsValidMove(mv[0], mv[1]))
       .every((movePos) => {
 
-        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos,king!);
+        const [exists, oppPiece] = this.IsOppPiece(...movePos as IPiecePos, king!);
         if (!exists) return true;
 
         if (oppPiece?.name() === 'Pawn') {
@@ -191,19 +190,50 @@ class ChessBoard implements IChessBoard {
     traverseKnightMoves(row, col).every((move) => callBack(move, ['Knight'], true));
     if (check) return true;
 
-    traverseKingMoves(row, col).every((move) => callBack(move, ['Knight'], true));
+    traverseKingMoves(row, col).every((move) => callBack(move, ['King'], true));
     if (check) return true;
 
     return false;
   }
 
   isInCheck(p: IChessPlayer): IPiecePos | null {
-    const kingPos = this.getPiece(this.kingPos[0][0], this.kingPos[0][1])?.belongsTo === p
-      ? this.kingPos[0] : this.kingPos[1];
-    console.log('kingPos',kingPos);
-    if (this.isKingInCheck(kingPos))
-      return kingPos;
+    const kingPos = this.kingPos[0].belongs === p ? this.kingPos[0] : this.kingPos[1];
+    // console.log('kingPos',kingPos);
+    if (this.isKingInCheck(kingPos.pos))
+      return kingPos.pos;
     return null;
+  }
+
+  // look for every piece and watch for moves piece 
+  // if any move of the piece cancels out check then its not a check mate 
+  // otherwise its a check mate
+  checkMate(player: IChessPlayer) {
+
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        const piece = this.getPiece(i, j);
+        const ownPiece = piece && (piece.belongsTo === player);
+        if (ownPiece) {
+          const moves = piece.availableMoves(this).toArray();
+          const [aRow, aCol] = piece.getPos();
+          for (const move of moves) {
+            // console.log('cjecmate1', move);
+            const [row, col] = move;
+            const currentPiece = this.getPiece(row, col);
+            this.movePiece(row, col, piece);
+            this.movePiece(aRow, aCol, null);
+            const moveCancelsCheckMate = !this.isInCheck(player);
+            this.movePiece(row, col, currentPiece);
+            this.movePiece(aRow, aCol, piece);
+            if (moveCancelsCheckMate) return false;
+          }
+
+        }
+      }
+    }
+
+    return true;
+
   }
 
   public get board() {
@@ -215,7 +245,7 @@ class ChessBoard implements IChessBoard {
   }
 
   getPiece(row: number, col: number): IChessPiece | null {
-    if (!IsValidMove(row,col)) {
+    if (!IsValidMove(row, col)) {
       throw new Error(`row${row} or col${col} values cant exede chess board size limit `);
     }
 
@@ -227,10 +257,21 @@ class ChessBoard implements IChessBoard {
     if (!pieceToCheck) return [false, pieceToCheck];
     return [pieceToCheck.belongsTo !== piece.belongsTo, pieceToCheck];
   }
-  
+
+  private updateKingPos(piece: IChessPiece) {
+    if (this.kingPos[0].belongs === piece.belongsTo) {
+      this.kingPos[0] = { belongs: piece.belongsTo, pos: piece.getPos() };
+    } else {
+      this.kingPos[1] = { belongs: piece.belongsTo, pos: piece.getPos() };
+    }
+  }
+
   movePiece(row: number, col: number, piece: IChessPiece | null) {
     this._board[row][col] = piece;
-    if(piece) piece.setPos(row,col);
+    if (piece) {
+      if (piece) piece.setPos(row, col);
+      if (piece.name() === 'King') this.updateKingPos(piece);
+    }
   }
 }
 export { makeChessBoard, makePiece, ChessBoard };
