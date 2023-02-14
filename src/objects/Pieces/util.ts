@@ -123,7 +123,7 @@ function traverseKingMoves(row: number, col: number): IPiecePos[] {
   return moves;
 }
 
-function IsValidMove(row:number,col:number): boolean {
+function IsValidMove(row: number, col: number): boolean {
   const validRow = (row < 8 && row > - 1);
   const validCol = (col < 8 && col > -1);
   return validRow && validCol;

@@ -5,7 +5,6 @@ import {
   IArraySetType,
   IChessBoard
 } from '../types';
-import { Pawn } from './Pawn/Pawn';
 
 abstract class Piece implements IChessPiece {
 
